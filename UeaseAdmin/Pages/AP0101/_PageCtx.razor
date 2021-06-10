@@ -1,0 +1,72 @@
+﻿@using UeaseAdmin.DB
+@using UeaseAdmin.Data
+@page "/ap0101"
+@inject IJSRuntime jsRuntime
+@inject Services.ReportService reportSvc
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h3">查詢瀏覽紀錄</MudText>
+    <MudText Typo="Typo.body2">說明查詢瀏覽紀錄，查詢瀏覽紀錄，查詢瀏覽紀錄3。</MudText>
+
+    <MudText Typo="Typo.h4">查詢條件</MudText>
+
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField @bind-Value="inputText" Label="LINE 顯示名稱" Variant="Variant.Text" />
+        </MudItem>
+    </MudGrid>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="HandleQuery">查詢</MudButton>
+
+    <MudText Typo="Typo.h4">查詢結果</MudText>
+
+    @if (dataList == null)
+    {
+        <MudText Typo="Typo.caption">無資料</MudText>
+    }
+    else
+    {
+        <MudTable Items="@dataList" Dense Hover Bordered Striped>
+            <HeaderContent>
+                <MudTh>序號</MudTh>
+                <MudTh>瀏覽時間</MudTh>
+                <MudTh>LINE ID</MudTh>
+                <MudTh>LINE 顯示名稱</MudTh>
+                <MudTh>產品 ID</MudTh>
+                <MudTh>產品名稱</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="序號">@context.sn</MudTd>
+                <MudTd DataLabel="瀏覽時間">@context.browseDtm.ToShortDateString() @context.browseDtm.ToShortTimeString()</MudTd>
+                <MudTd DataLabel="LINE ID">@context.lineId</MudTd>
+                <MudTd DataLabel="LINE 顯示名稱">@context.lineDisplayName</MudTd>
+                <MudTd DataLabel="產品 ID">@context.productId</MudTd>
+                <MudTd DataLabel="產品名稱">@context.productName</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    }
+
+</MudContainer>
+
+@code{
+    private IEnumerable<LIFF_BROWSE_LOG> dataList;
+
+    private string inputText { get; set; }
+
+    protected override void OnInitialized()
+    {
+        //jsRuntime.InvokeVoidAsync("alert", "ON:OnInitialized");
+    }
+
+    #region Event Handlers
+
+    private void HandleQuery()
+    {
+        dataList = reportSvc.BrowseLog(inputText);
+        jsRuntime.InvokeVoidAsync("alert", "ON:HandleQuery");
+    }
+
+    #endregion
+}

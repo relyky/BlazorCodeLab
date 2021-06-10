@@ -1,0 +1,21 @@
+﻿@page "/counter"
+
+<MudContainer MaxWidth="MaxWidth.Large">
+
+    <h1>Counter</h1>
+
+    <p>Current count: @currentCount</p>
+
+    <MudButton Variant="Variant.Filled" Color="@Color.Secondary" OnClick="IncrementCount">Click me</MudButton>
+
+    @code
+    {
+        private int currentCount = 0;
+
+        private void IncrementCount()
+        {
+            currentCount++;
+        }
+    }
+
+</MudContainer>
